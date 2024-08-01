@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if not game.msg_end_game %}
+        <p>
+            <a href="{% url 'index' %}">
+                <button>Quitter la partie</button>
+            </a>
+        </p>
+    {% endif %}
+    {% if game.turns %}
+        {% for turn in turns %}
+            <p>{{ turn }}</p>
+        {% endfor %}
+    {% endif %}
+    {% if game.msg_end_game %}
+        <p>{{ game.msg_end_game }}</p>
+        <p>
+            <a href="{% url 'index' %}">
+                <button>Quitter la partie</button>
+            </a>
+        </p>
+    {% else %}
+    <p>Entrez votre combinaison:</p>
+    
+    <form method="POST">
+        {% csrf_token %}
+        {% for pellet in form %}
+            {{ pellet }}
+        {% endfor %}
+        <input type="submit" value="Valider la combinaison">
+    </form>
+    {% endif %}
+{% endblock %}
