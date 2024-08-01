@@ -30,10 +30,10 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG", False)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
-print(SECRET_KEY)
-print(DEBUG)
-print(type(DEBUG))
-print(ALLOWED_HOSTS)
+# print(SECRET_KEY)
+# print(DEBUG)
+# print(type(DEBUG))
+# print(ALLOWED_HOSTS)
 
 # Application definition
 
@@ -124,6 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
