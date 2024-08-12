@@ -9,7 +9,7 @@
         </p>
     {% endif %}
     {% if game.turns %}
-        {% for turn in turns %}
+        {% for turn in game.turns %}
             <p>{{ turn }}</p>
         {% endfor %}
     {% endif %}

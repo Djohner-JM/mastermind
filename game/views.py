@@ -38,7 +38,16 @@ def new_game(request):
         user_comb = [elem for elem in user_comb.values()][:-1]
         display = turn_treatment(user_comb, game.winning_combination)
         game.number_of_turns -= 1
-        game.turns.append(display)
+        print("1")
+        print(game.turns)
+        if game.turns:
+            game.turns = game.turns.replace("[","").replace("]","").replace("'","").replace(", ","\n")
+        game.turns += display
+        print("2")
+        print(game.turns)
+        game.turns = game.turns.split("\n")
+        print("3")
+        print(game.turns)
         game.end_game = game.winning_combination == user_comb
         
         if game.end_game or not game.number_of_turns:
@@ -51,16 +60,14 @@ def new_game(request):
         
         game = Game()
         game.winning_combination = [choice([elem for elem in SQUARE_LIST]) for _ in range(4)]
-        game.turns.clear()
         game.end_game = False
         game.save()
         form = TurnForm(data={"game_id": game.id})
             
-    game.save() if not game.end_game else game.delete()
+    game.save()
     
     return render(request, "game/game.html", context={"form":form,
                                                       "game": game,
-                                                      "turns": game.turns
                                                       })
 
 #LOGIC
@@ -81,4 +88,4 @@ def turn_treatment(comb, win_comb):
             indicators.append(SYMBOLS[1])
             win_comb_copy.remove(elem)
                   
-    return f"{' '.join(SQUARE_LIST[elem] for elem in comb)}: {''.join(indicators)}"
+    return f"{' '.join(SQUARE_LIST[elem] for elem in comb)}: {''.join(indicators)}\n"

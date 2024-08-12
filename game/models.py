@@ -14,14 +14,13 @@ class Turn(models.Model):
     pellet_2 = models.CharField(max_length=6, choices=SQUARE_LIST)
     pellet_3 = models.CharField(max_length=6, choices=SQUARE_LIST)
     pellet_4 = models.CharField(max_length=6, choices=SQUARE_LIST)
-    # game_id = models.IntegerField(default=1)
 
 class Game(models.Model):
     winning_combination = models.CharField(max_length=100)
     number_of_turns = models.IntegerField(default=10)
     end_game = models.BooleanField(default=False)
     msg_end_game = models.TextField(default="", null=True, blank=True)
-    turns = []
+    turns = models.TextField(default="", null=True, blank=True)
 
     def __str__(self) -> str:
         return "Partie en cours"
