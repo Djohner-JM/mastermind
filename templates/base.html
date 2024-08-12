@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>MASTERMIND</title>
 </head>
 <body>
@@ -12,6 +14,7 @@
     Trouver la bonne combinaison de quatre couleurs secrètes que notre 'IA' aura généré.<br>
     A chaque couleur bien positionnée, vous aurez en retour un indicateur vert.<br>
     A chaque couleur présente mais mal positionnée, vous aurez en retour un indicateur rouge.<br>
+    La combinaison peut contenir plusieurs fois la même couleur.<br>
     </p>
 
     {% block content %}

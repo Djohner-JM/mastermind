@@ -24,34 +24,40 @@ SYMBOLS = [chr(0x1F7E2), chr(0x1F534)]
 
 #VIEWS
 def index(request):
-    game = Game.objects.all()
-    game.delete()
     return render(request, "game/index.html")
 
 def new_game(request):
     if request.method == "POST":
         form = TurnForm(request.POST) 
-        if form.is_valid():
+        if form.is_valid():      
+            game_id = form.cleaned_data["game_id"]
             user_comb = form.cleaned_data
         
-        game = get_object_or_404(Game)
+        game = Game.objects.get(id=game_id)
         game.winning_combination = game.winning_combination.replace("[","").replace("]","").replace("'","").replace(" ","").split(",")
-        user_comb = [elem for elem in user_comb.values()]
+        user_comb = [elem for elem in user_comb.values()][:-1]
         display = turn_treatment(user_comb, game.winning_combination)
         game.number_of_turns -= 1
         game.turns.append(display)
-        game.end_game = win_or_not(user_comb, game)
+        game.end_game = game.winning_combination == user_comb
         
-        if (game.end_game or (game.number_of_turns == 0)):
-            game.msg_end_game = f"{MSG_WIN if game.end_game else MSG_LOOSE}\n La bonne combaison était {' '.join(SQUARE_LIST[elem] for elem in game.winning_combination)}"
-    
+        if game.end_game or not game.number_of_turns:
+            game.msg_end_game = f"{MSG_WIN if game.end_game else MSG_LOOSE}\n La bonne combinaison était {' '.join(SQUARE_LIST[elem] for elem in game.winning_combination)}"       
     else:  
+        games = Game.objects.all()
+        if len(games) > 25:
+            for game in games[10:]:
+                game.delete()
+        
         game = Game()
         game.winning_combination = [choice([elem for elem in SQUARE_LIST]) for _ in range(4)]
         game.turns.clear()
-        form = TurnForm()
-        
-    game.save()
+        game.end_game = False
+        game.save()
+        form = TurnForm(data={"game_id": game.id})
+            
+    game.save() if not game.end_game else game.delete()
+    
     return render(request, "game/game.html", context={"form":form,
                                                       "game": game,
                                                       "turns": game.turns
@@ -75,12 +81,4 @@ def turn_treatment(comb, win_comb):
             indicators.append(SYMBOLS[1])
             win_comb_copy.remove(elem)
                   
-    display = f"{' '.join(SQUARE_LIST[elem] for elem in comb)}: {''.join(indicators)}"
-    
-    return display
-    
-def win_or_not(user_comb, game):
-    win_comb = game.winning_combination
-    if win_comb == user_comb:
-        return True
-    return False
+    return f"{' '.join(SQUARE_LIST[elem] for elem in comb)}: {''.join(indicators)}"

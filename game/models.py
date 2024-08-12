@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 SQUARE_LIST = [("Jaune",f"{chr(0x1F7E8)}"),
                ("Bleue", f"{chr(0x1F7E6)}"),
@@ -13,6 +14,7 @@ class Turn(models.Model):
     pellet_2 = models.CharField(max_length=6, choices=SQUARE_LIST)
     pellet_3 = models.CharField(max_length=6, choices=SQUARE_LIST)
     pellet_4 = models.CharField(max_length=6, choices=SQUARE_LIST)
+    # game_id = models.IntegerField(default=1)
 
 class Game(models.Model):
     winning_combination = models.CharField(max_length=100)
