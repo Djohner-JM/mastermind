@@ -38,16 +38,10 @@ def new_game(request):
         user_comb = [elem for elem in user_comb.values()][:-1]
         display = turn_treatment(user_comb, game.winning_combination)
         game.number_of_turns -= 1
-        print("1")
-        print(game.turns)
         if game.turns:
             game.turns = game.turns.replace("[","").replace("]","").replace("'","").replace(", ","\n")
         game.turns += display
-        print("2")
-        print(game.turns)
         game.turns = game.turns.split("\n")
-        print("3")
-        print(game.turns)
         game.end_game = game.winning_combination == user_comb
         
         if game.end_game or not game.number_of_turns:
